@@ -32,9 +32,8 @@ export default function HomePage() {
           </p>
 
           <p className="mb-12 text-pretty text-base leading-relaxed text-muted-foreground md:text-lg">
-            Over 1000+ unique pieces created entirely with a mouse. Each stroke tells a story of precision, dedication,
-            and digital craftsmanship. Legendary 1/1s and complete series, all living permanently on the XRPL
-            blockchain.
+            Unique pieces created with a story of precision, dedication, and digital craftsmanship. 
+            Legendary 1/1s and complete series, all living permanently on the XRPL blockchain.
           </p>
 
           <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
