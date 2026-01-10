@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Search, Filter } from "lucide-react"
 import Image from "next/image"
-import { useState } from "react"
+import { useState, useMemo } from "react"
 
 // Mock NFT data
 const mockNFTs = [
@@ -152,6 +152,17 @@ export default function CollectionsPage() {
   const [selectedNFT, setSelectedNFT] = useState<(typeof mockNFTs)[0] | null>(null)
   const [searchQuery, setSearchQuery] = useState("")
   const [filterOpen, setFilterOpen] = useState(false)
+  const [activeFilter, setActiveFilter] = useState<"all" | "1/1">("all")
+
+  const filteredNFTs = useMemo(() => {
+    return mockNFTs.filter((nft) => {
+      const matchesSearch = nft.name.toLowerCase().includes(searchQuery.toLowerCase())
+      const matchesFilter =
+        activeFilter === "all" ? true : nft.edition === "1/1"
+
+      return matchesSearch && matchesFilter
+    })
+  }, [searchQuery, activeFilter])
 
   return (
     <div className="relative min-h-screen">
@@ -160,10 +171,9 @@ export default function CollectionsPage() {
 
       <div className="container mx-auto px-4 pt-24 pb-20 lg:px-8">
         <div className="mb-12">
-          <h1 className="mb-4 text-balance text-4xl font-bold tracking-tight md:text-5xl">Collection</h1>
-          <p className="text-pretty leading-relaxed text-muted-foreground">
-            Explore 1000+ hand-drawn pieces. Each artwork represents hours of patient mouse work.
-          </p>
+          <h1 className="mb-4 text-balance text-4xl font-bold tracking-tight md:text-5xl">
+            Collection
+          </h1>
         </div>
 
         {/* Search and Filter */}
@@ -177,7 +187,7 @@ export default function CollectionsPage() {
               className="pl-10"
             />
           </div>
-          <Button variant="outline" onClick={() => setFilterOpen(!filterOpen)} className="sm:w-auto">
+          <Button variant="outline" onClick={() => setFilterOpen(!filterOpen)}>
             <Filter className="mr-2 h-4 w-4" />
             Filter
           </Button>
@@ -186,19 +196,24 @@ export default function CollectionsPage() {
         {/* Filter Panel */}
         {filterOpen && (
           <div className="mb-8 rounded-sm border border-border/50 bg-card p-6">
-            <h3 className="mb-4 font-mono text-sm font-bold uppercase tracking-wider">Filter by Rarity</h3>
-            <div className="flex flex-wrap gap-2">
-              <Button variant="outline" size="sm">
+            <h3 className="mb-4 font-mono text-sm font-bold uppercase tracking-wider">
+              Filter
+            </h3>
+            <div className="flex gap-2">
+              <Button
+                variant={activeFilter === "all" ? "default" : "outline"}
+                size="sm"
+                onClick={() => setActiveFilter("all")}
+              >
                 All
               </Button>
-              <Button variant="outline" size="sm">
-                1/1 Legendary
-              </Button>
-              <Button variant="outline" size="sm">
-                Series
-              </Button>
-              <Button variant="outline" size="sm">
-                Standard
+
+              <Button
+                variant={activeFilter === "1/1" ? "default" : "outline"}
+                size="sm"
+                onClick={() => setActiveFilter("1/1")}
+              >
+                1/1
               </Button>
             </div>
           </div>
@@ -206,7 +221,7 @@ export default function CollectionsPage() {
 
         {/* NFT Grid */}
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {mockNFTs.map((nft) => (
+          {filteredNFTs.map((nft) => (
             <div
               key={nft.id}
               onClick={() => setSelectedNFT(nft)}
@@ -214,21 +229,21 @@ export default function CollectionsPage() {
             >
               <div className="relative aspect-square overflow-hidden bg-muted">
                 <Image
-                  src={nft.image || "/placeholder.svg"}
+                  src={nft.image}
                   alt={nft.name}
                   fill
                   className="object-cover transition-transform duration-500 group-hover:scale-105"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
               </div>
               <div className="p-4">
-                <p className="mb-1 font-mono text-xs uppercase tracking-wider text-muted-foreground">
-                  {nft.collection}
-                </p>
-                <h3 className="mb-2 text-balance font-bold">{nft.name}</h3>
-                <div className="flex items-center justify-between">
-                  <p className="font-mono text-sm font-bold text-primary">{nft.price}</p>
-                  <p className="font-mono text-xs text-muted-foreground">{nft.edition}</p>
+                <h3 className="mb-2 font-bold">{nft.name}</h3>
+                <div className="flex justify-between">
+                  <p className="font-mono text-sm font-bold text-primary">
+                    {nft.price}
+                  </p>
+                  <p className="font-mono text-xs text-muted-foreground">
+                    {nft.edition}
+                  </p>
                 </div>
               </div>
             </div>
@@ -236,8 +251,13 @@ export default function CollectionsPage() {
         </div>
       </div>
 
-      {selectedNFT && <NFTModal isOpen={true} onClose={() => setSelectedNFT(null)} nft={selectedNFT as any} />}
-
+      {selectedNFT && (
+        <NFTModal
+          isOpen={true}
+          onClose={() => setSelectedNFT(null)}
+          nft={selectedNFT as any}
+        />
+      )}
     </div>
   )
 }
