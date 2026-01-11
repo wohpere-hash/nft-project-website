@@ -16,7 +16,7 @@ export default function HomePage() {
       {/* Stats Section (Moved to Top) */}
       <section className="container mx-auto px-4 pt-32 pb-12 lg:px-8">
         <div className="mx-auto grid max-w-5xl gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          <StatCard label="Floor Price" value="5.0 XRP" />
+          <StatCard label="Floor Price" value="5.89 XRP" />
           <StatCard label="Total Items" value="288" />
           <StatCard label="Total Volume" value="176.0 XRP" />
           <StatCard label="Holders" value="9" />
