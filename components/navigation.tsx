@@ -33,7 +33,7 @@ export function Navigation() {
                 />
               </svg>
             </div>
-            <span className="font-mono text-sm font-bold tracking-tight">LINES ART</span>
+            <span className="font-mono text-sm font-bold tracking-tight">WORTHLESS ART</span>
           </Link>
 
           {/* Desktop Navigation */}
