@@ -58,9 +58,6 @@ export default function HomePage() {
               </a>
             </Button>
 
-            <Button size="lg" variant="outline" asChild className="min-w-[200px] bg-transparent">
-              <Link href="/collections">View Collection</Link>
-            </Button>
           </div>
         </div>
       </section>
